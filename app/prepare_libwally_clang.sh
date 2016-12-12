@@ -63,15 +63,28 @@ function build() {
     rm -rf ./toolchain >/dev/null 2>&1
     $ANDROID_NDK/build/tools/make_standalone_toolchain.py --arch $arch --api $ANDROID_VERSION --install-dir=./toolchain
 
+    OLDPATH=$PATH
+    export PATH=`pwd`/toolchain/bin:$PATH
+    export AR=$(ls `pwd`/toolchain/bin/*-ar | grep -v gcc)
+    export CC=$(ls `pwd`/toolchain/bin/*-clang)
+    export RANLIB=$(ls `pwd`/toolchain/bin/*-ranlib | grep -v gcc)
+    echo NEWAR $AR
+    ls `pwd`/toolchain/bin
+
     echo '============================================================'
     echo Building $1
     echo '============================================================'
-    ./configure --host=$HOST_OS --target=$arch $configure_opts >/dev/null
-    make -o configure clean -j$NUM_JOBS >/dev/null 2>&1
+    ./configure --host=$HOST_OS --target=$arch $configure_opts 
+    make -o configure clean -j$NUM_JOBS
     make -o configure -j$NUM_JOBS V=1
 
     mkdir -p ../src/main/jniLibs/$1
+    if [ -e src/.libs/libwallycore.dylib ]; then
+        mv src/.libs/libwallycore.dylib src/.libs/libwallycore.so
+    fi
     toolchain/bin/*-strip -o ../src/main/jniLibs/$1/libwallycore.so src/.libs/libwallycore.so
+
+    export PATH=$OLDPATH
 }
 
 if [ -n "$1" ]; then
@@ -92,8 +105,6 @@ fi
 tools/cleanup.sh
 tools/autogen.sh
 
-export PATH=`pwd`/toolchain/bin:$PATH
-export CC=clang
 
 for a in $all_archs; do
     build $a
