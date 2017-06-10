@@ -10,7 +10,7 @@ You need to have the following Android developer tools installed:
 - "Android SDK Tools" version 26.0.2 recommended
 - "Android SDK Build-tools" version 25.0.3 recommended
 - "Android Support Library" version 25.3.1 recommended
-- "Android NDK" version r14b recommended
+- "Android NDK" version r15 recommended
 
 The above tools can be installed from the Android SDK manager.
 

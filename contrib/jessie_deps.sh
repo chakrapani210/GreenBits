@@ -2,7 +2,7 @@
 set -e
 
 export SDK_FILENAME=sdk-tools-linux-3859397.zip
-export NDK_FILENAME=android-ndk-r14b-linux-x86_64.zip
+export NDK_FILENAME=android-ndk-r15-linux-x86_64.zip
 
 echo "deb http://http.debian.net/debian jessie-backports main" | tee -a /etc/apt/sources.list
 mkdir -p ~/.gradle/
